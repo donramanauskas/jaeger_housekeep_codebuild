@@ -28,10 +28,6 @@ def lambda_handler(event, context):
     index_list.filter_by_regex(
         kind='prefix',
         value='jaeger-'
-    ).filter_by_age(
-        source='creation_date',
-        direction='older', unit='days',
-        unit_count=retention_days
     )
 
     return index_list
