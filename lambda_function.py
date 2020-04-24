@@ -24,18 +24,30 @@ def lambda_handler(event, context):
     except ValueError:
         logger.error("ES_RETENTION_DAYS must be set as environment variable")
         return
+    try:
+        index_list = curator.IndexList(client)
+    except Exception as e:
+        logger.error("Failed to connect to ES DB with error: {}".format(e))
+        return
 
-    index_list = curator.IndexList(client)
-    index_list.filter_by_regex(
-        kind='prefix',
-        value='jaeger-'
-    )
+    try:
+        index_list.filter_by_regex(
+            kind='prefix',
+            value='jaeger-'
+        )
+    except Exception as e:
+        logger.error("Filtering by jeager preffix failed, received error: {}".format(e))
 
-    index_list.filter_by_age(
-        source='creation_date',
-        direction='older',
-        unit='days',
-        unit_count=retention_days
-    )
+    try:
+        index_list.filter_by_age(
+            source='creation_date',
+            direction='older',
+            unit='days',
+            unit_count=retention_days
+        )
+    except Exception as e:
+        logger.error("Filtering by age failed with error: {}".format(e))
+
+    print(len(index_list.working_list()))
 
     return index_list.working_list()
