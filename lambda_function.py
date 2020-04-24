@@ -55,7 +55,7 @@ def lambda_handler(event, context):
     if len(indexes_to_delete) > 0:
         try:
             logger.info("Deleting indexes: {}".format(indexes_to_delete.sort()))
-            curator.DeleteIndices(indexes_to_delete).do_action()
+            curator.DeleteIndices(index_list).do_action()
         except Exception as e:
             logger.error("Got error {} when trying to delete indexes".format(e))
             return
