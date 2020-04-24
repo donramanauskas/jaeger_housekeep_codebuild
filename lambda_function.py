@@ -30,4 +30,11 @@ def lambda_handler(event, context):
         value='jaeger-'
     )
 
-    return index_list.working_list()
+    index_list.filter_by_age(
+        source='creation_date',
+        direction='older',
+        unit='days',
+        unit_count=retention_days
+    )
+
+    return type(index_list.working_list())
