@@ -2,6 +2,7 @@ import os
 import logging
 import elasticsearch
 import curator
+import json
 
 logger = logging.getLogger()
 
@@ -37,4 +38,7 @@ def lambda_handler(event, context):
         unit_count=retention_days
     )
 
-    return index_list.working_list()
+    return {
+        'statusCode': 200,
+        'body': json.dumps(type(index_list.working_list()))
+    }
