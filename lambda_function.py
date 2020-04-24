@@ -8,9 +8,11 @@ logger = logging.getLogger()
 client = elasticsearch.Elasticsearch(
     [
         {
-            "host": os.environ['ES_RETENTION_DAYS']
+            "host": os.environ['ES_RETENTION_DAYS'],
+            'port': 443
         }
-    ]
+    ],
+    use_ssl=True
 )
 
 
