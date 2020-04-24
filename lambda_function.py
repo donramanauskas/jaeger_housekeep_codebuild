@@ -30,4 +30,4 @@ def lambda_handler(event, context):
         value='jaeger-'
     )
 
-    return index_list
+    return index_list.working_list()
