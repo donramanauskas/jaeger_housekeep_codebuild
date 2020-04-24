@@ -38,7 +38,4 @@ def lambda_handler(event, context):
         unit_count=retention_days
     )
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps(type(index_list.working_list()))
-    }
+    return index_list.working_list()
