@@ -37,6 +37,7 @@ def lambda_handler(event, context):
         )
     except Exception as e:
         logger.error("Filtering by jeager preffix failed, received error: {}".format(e))
+        return
 
     try:
         index_list.filter_by_age(
@@ -47,7 +48,19 @@ def lambda_handler(event, context):
         )
     except Exception as e:
         logger.error("Filtering by age failed with error: {}".format(e))
+        return
 
-    print(len(index_list.working_list()))
+    indexes_to_delete = index_list.working_list()
 
-    return index_list.working_list()
+    if len(indexes_to_delete) > 0:
+        try:
+            logger.info("Deleting indexes: {}".format(indexes_to_delete.sort()))
+            curator.DeleteIndices(indexes_to_delete).do_action()
+        except Exception as e:
+            logger.error("Got error } when trying to delete indexes".format(e))
+            return
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Removed indexes for last {} days'.format(retention_days))
+    }
