@@ -37,4 +37,4 @@ def lambda_handler(event, context):
         unit_count=retention_days
     )
 
-    return type(index_list.working_list())
+    return index_list.working_list()
